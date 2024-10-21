@@ -63,7 +63,8 @@ def create_ui():
                             shared.gradio['Generate'] = gr.Button('Generate', elem_id='Generate', variant='primary')
 
         # Hover menu buttons
-        with gr.Column(elem_id='chat-buttons'):
+        with gr.Column(elem_id='chat-buttons') as chat_buttons:
+            shared.ui_extension_point['chat_buttons'] = chat_buttons
             with gr.Row():
                 shared.gradio['Regenerate'] = gr.Button('Regenerate (Ctrl + Enter)', elem_id='Regenerate')
                 shared.gradio['Continue'] = gr.Button('Continue (Alt + Enter)', elem_id='Continue')
@@ -83,7 +84,9 @@ def create_ui():
                 shared.gradio['send-chat-to-notebook'] = gr.Button('Send to notebook')
 
         with gr.Row(elem_id='chat-controls', elem_classes=['pretty_scrollbar']):
-            with gr.Column():
+            with gr.Column() as sidebar:
+                shared.ui_extension_point['sidebar'] = sidebar
+#                shared.ui_extension_point['chat_management'] = chat_management
                 with gr.Row():
                     shared.gradio['start_with'] = gr.Textbox(label='Start reply with', placeholder='Sure thing!', value=shared.settings['start_with'], elem_classes=['add_scrollbar'])
 
