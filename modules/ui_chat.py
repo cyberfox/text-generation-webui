@@ -41,7 +41,8 @@ def create_ui():
                             shared.gradio['Generate'] = gr.Button('Generate', elem_id='Generate', variant='primary')
 
         # Hover menu buttons
-        with gr.Column(elem_id='chat-buttons'):
+        with gr.Column(elem_id='chat-buttons') as chat_buttons:
+            shared.ui_extension_point['chat_buttons'] = chat_buttons
             with gr.Row():
                 shared.gradio['Regenerate'] = gr.Button('Regenerate (Ctrl + Enter)', elem_id='Regenerate')
                 shared.gradio['Continue'] = gr.Button('Continue (Alt + Enter)', elem_id='Continue')
@@ -62,7 +63,8 @@ def create_ui():
 
         with gr.Row(elem_id='past-chats-row', elem_classes=['pretty_scrollbar']):
             with gr.Column():
-                with gr.Row():
+                with gr.Row() as chat_management:
+                    shared.ui_extension_point['chat_management'] = chat_management
                     shared.gradio['rename_chat'] = gr.Button('Rename', elem_classes='refresh-button', interactive=not mu)
                     shared.gradio['delete_chat'] = gr.Button('🗑️', elem_classes='refresh-button', interactive=not mu)
                     shared.gradio['delete_chat-confirm'] = gr.Button('Confirm', variant='stop', visible=False, elem_classes=['refresh-button', 'focus-on-chat-input'])
@@ -80,7 +82,8 @@ def create_ui():
                     shared.gradio['unique_id'] = gr.Radio(label="", elem_classes=['slim-dropdown', 'pretty_scrollbar'], interactive=not mu, elem_id='past-chats')
 
         with gr.Row(elem_id='chat-controls', elem_classes=['pretty_scrollbar']):
-            with gr.Column():
+            with gr.Column() as sidebar:
+                shared.ui_extension_point['sidebar'] = sidebar
                 with gr.Row():
                     shared.gradio['start_with'] = gr.Textbox(label='Start reply with', placeholder='Sure thing!', value=shared.settings['start_with'], elem_classes=['add_scrollbar'])
 
