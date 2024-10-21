@@ -27,6 +27,7 @@ processing_message = ''
 gradio = {}
 persistent_interface_state = {}
 need_restart = False
+ui_extension_point = {}
 
 # UI defaults
 settings = {

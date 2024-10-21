@@ -63,19 +63,29 @@ def create_ui():
                             shared.gradio['Generate'] = gr.Button('Generate', elem_id='Generate', variant='primary')
 
         # Hover menu buttons
-        with gr.Column(elem_id='chat-buttons'):
-            shared.gradio['Regenerate'] = gr.Button('Regenerate (Ctrl + Enter)', elem_id='Regenerate')
-            shared.gradio['Continue'] = gr.Button('Continue (Alt + Enter)', elem_id='Continue')
-            shared.gradio['Remove last'] = gr.Button('Remove last reply (Ctrl + Shift + Backspace)', elem_id='Remove-last')
-            shared.gradio['Impersonate'] = gr.Button('Impersonate (Ctrl + Shift + M)', elem_id='Impersonate')
-            shared.gradio['Send dummy message'] = gr.Button('Send dummy message')
-            shared.gradio['Send dummy reply'] = gr.Button('Send dummy reply')
-            shared.gradio['send-chat-to-default'] = gr.Button('Send to Default')
-            shared.gradio['send-chat-to-notebook'] = gr.Button('Send to Notebook')
-            shared.gradio['show_controls'] = gr.Checkbox(value=shared.settings['show_controls'], label='Show controls (Ctrl+S)', elem_id='show-controls')
+        with gr.Column(elem_id='chat-buttons') as chat_buttons:
+            shared.ui_extension_point['chat_buttons'] = chat_buttons
+            with gr.Row():
+                shared.gradio['Regenerate'] = gr.Button('Regenerate (Ctrl + Enter)', elem_id='Regenerate')
+                shared.gradio['Continue'] = gr.Button('Continue (Alt + Enter)', elem_id='Continue')
+                shared.gradio['Remove last'] = gr.Button('Remove last reply (Ctrl + Shift + Backspace)', elem_id='Remove-last')
+
+            with gr.Row():
+                shared.gradio['Replace last reply'] = gr.Button('Replace last reply (Ctrl + Shift + L)', elem_id='Replace-last')
+                shared.gradio['Copy last reply'] = gr.Button('Copy last reply (Ctrl + Shift + K)', elem_id='Copy-last')
+                shared.gradio['Impersonate'] = gr.Button('Impersonate (Ctrl + Shift + M)', elem_id='Impersonate')
+
+            with gr.Row():
+                shared.gradio['Send dummy message'] = gr.Button('Send dummy message')
+                shared.gradio['Send dummy reply'] = gr.Button('Send dummy reply')
+
+            with gr.Row():
+                shared.gradio['send-chat-to-default'] = gr.Button('Send to default')
+                shared.gradio['send-chat-to-notebook'] = gr.Button('Send to notebook')
 
         with gr.Row(elem_id='chat-controls', elem_classes=['pretty_scrollbar']):
-            with gr.Column():
+            with gr.Column() as sidebar:
+                shared.ui_extension_point['sidebar'] = sidebar
                 with gr.Row():
                     shared.gradio['start_with'] = gr.Textbox(label='Start reply with', placeholder='Sure thing!', value=shared.settings['start_with'], elem_classes=['add_scrollbar'])
 
