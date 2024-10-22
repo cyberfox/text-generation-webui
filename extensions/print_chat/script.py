@@ -23,3 +23,17 @@ def ui():
                                                       value=shared.settings.get('persona', "Morgan"),
                                                       visible=shared.settings['mode'] != 'instruct', interactive=True)
             shared.gradio['persona'].change(chat.redraw_html, gradio(reload_arr), gradio('display'), show_progress=False)
+
+    with shared.ui_extension_point['chat_buttons']:
+        shared.gradio['Replace & Continue'] = gr.Button('Replace & Continue', elem_id='Replace-continue')
+
+        shared.gradio['Replace & Continue'].click(
+            ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
+            chat.replace_last_reply, gradio('textbox', 'interface_state'), gradio('history')).then(
+            lambda: '', None, gradio('textbox'), show_progress=False).then(
+            chat.redraw_html, gradio(reload_arr), gradio('display')).then(
+            partial(chat.generate_chat_reply_wrapper, _continue=True), gradio(inputs), gradio('display', 'history'),
+            show_progress=False).then(
+            ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
+            chat.save_history, gradio('history', 'unique_id', 'character_menu', 'mode'), None).then(
+            lambda: None, None, None, _js=f'() => {{{ui.audio_notification_js}}}')
