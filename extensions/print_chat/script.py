@@ -99,9 +99,9 @@ def on_persona_change(selected_persona):
 
 
 def ui():
-    with shared.ui_extension_point['chat_management']:
-        shared.gradio['Print chat'] = gr.Button('Print chat',
-                                                    elem_classes=['refresh-button', 'focus-on-chat-input'])
+#    with shared.ui_extension_point['chat_management']:
+#        shared.gradio['Print chat'] = gr.Button('Print chat',
+#                                                    elem_classes=['refresh-button', 'focus-on-chat-input'])
 
     with shared.ui_extension_point['sidebar']:
         with gr.Row():
