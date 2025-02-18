@@ -850,6 +850,7 @@ def generate_chat_reply(text, state, regenerate=False, _continue=False, loading_
             yield history
             return
 
+    show_after = html.escape(state.get("show_after")) if state.get("show_after") else None
     for history in chatbot_wrapper(text, state, regenerate=regenerate, _continue=_continue, loading_message=loading_message, for_ui=for_ui):
         yield history
 
