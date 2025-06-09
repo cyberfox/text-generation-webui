@@ -1563,7 +1563,6 @@ def handle_delete_chat_confirm_click(state):
         unique_id,
         gr.update(visible=False),
         gr.update(visible=True),
-        gr.update(visible=False)
     ]
 
 
