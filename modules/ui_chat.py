@@ -65,23 +65,14 @@ def create_ui():
         # Hover menu buttons
         with gr.Column(elem_id='chat-buttons') as chat_buttons:
             shared.ui_extension_point['chat_buttons'] = chat_buttons
-            with gr.Row():
-                shared.gradio['Regenerate'] = gr.Button('Regenerate (Ctrl + Enter)', elem_id='Regenerate')
-                shared.gradio['Continue'] = gr.Button('Continue (Alt + Enter)', elem_id='Continue')
-                shared.gradio['Remove last'] = gr.Button('Remove last reply (Ctrl + Shift + Backspace)', elem_id='Remove-last')
-
-            with gr.Row():
-                shared.gradio['Replace last reply'] = gr.Button('Replace last reply (Ctrl + Shift + L)', elem_id='Replace-last')
-                shared.gradio['Copy last reply'] = gr.Button('Copy last reply (Ctrl + Shift + K)', elem_id='Copy-last')
-                shared.gradio['Impersonate'] = gr.Button('Impersonate (Ctrl + Shift + M)', elem_id='Impersonate')
-
-            with gr.Row():
-                shared.gradio['Send dummy message'] = gr.Button('Send dummy message')
-                shared.gradio['Send dummy reply'] = gr.Button('Send dummy reply')
-
-            with gr.Row():
-                shared.gradio['send-chat-to-default'] = gr.Button('Send to default')
-                shared.gradio['send-chat-to-notebook'] = gr.Button('Send to notebook')
+            shared.gradio['Regenerate'] = gr.Button('Regenerate (Ctrl + Enter)', elem_id='Regenerate')
+            shared.gradio['Continue'] = gr.Button('Continue (Alt + Enter)', elem_id='Continue')
+            shared.gradio['Remove last'] = gr.Button('Remove last reply (Ctrl + Shift + Backspace)', elem_id='Remove-last')
+            shared.gradio['Impersonate'] = gr.Button('Impersonate (Ctrl + Shift + M)', elem_id='Impersonate')
+            shared.gradio['Send dummy message'] = gr.Button('Send dummy message')
+            shared.gradio['Send dummy reply'] = gr.Button('Send dummy reply')
+            shared.gradio['send-chat-to-notebook'] = gr.Button('Send to Notebook')
+            shared.gradio['show_controls'] = gr.Checkbox(value=shared.settings['show_controls'], label='Show controls (Ctrl+S)', elem_id='show-controls')
 
         with gr.Row(elem_id='chat-controls', elem_classes=['pretty_scrollbar']):
             with gr.Column() as sidebar:
@@ -193,7 +184,6 @@ def create_chat_settings_ui():
             with gr.Column():
                 shared.gradio['instruction_template_str'] = gr.Textbox(value=shared.settings['instruction_template_str'], label='Instruction template', lines=24, info='This gets autodetected; you usually don\'t need to change it. Used in instruct and chat-instruct modes.', elem_classes=['add_scrollbar', 'monospace'], elem_id='instruction-template-str')
                 with gr.Row():
-                    shared.gradio['send_instruction_to_default'] = gr.Button('Send to default', elem_classes=['small-button'])
                     shared.gradio['send_instruction_to_notebook'] = gr.Button('Send to notebook', elem_classes=['small-button'])
 
             with gr.Column():
@@ -354,24 +344,14 @@ def create_event_handlers():
         ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
         chat.handle_your_picture_change, gradio('your_picture', 'interface_state'), gradio('display'), show_progress=False)
 
-    shared.gradio['send_instruction_to_default'].click(
-        ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
-        chat.handle_send_instruction_click, gradio('interface_state'), gradio('textbox-default'), show_progress=False).then(
-        None, None, None, js=f'() => {{{ui.switch_tabs_js}; switch_to_default()}}')
-
     shared.gradio['send_instruction_to_notebook'].click(
         ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
         chat.handle_send_instruction_click, gradio('interface_state'), gradio('textbox-notebook'), show_progress=False).then(
         None, None, None, js=f'() => {{{ui.switch_tabs_js}; switch_to_notebook()}}')
 
-    shared.gradio['send-chat-to-default'].click(
-        ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
-        chat.handle_send_chat_click, gradio('interface_state'), gradio('textbox-default'), show_progress=False).then(
-        None, None, None, js=f'() => {{{ui.switch_tabs_js}; switch_to_default()}}')
-
     shared.gradio['send-chat-to-notebook'].click(
         ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
-        chat.handle_send_chat_click, gradio('interface_state'), gradio('textbox-notebook'), show_progress=False).then(
+        chat.handle_send_chat_click, gradio('interface_state'), gradio('textbox-notebook', 'textbox-default', 'output_textbox'), show_progress=False).then(
         None, None, None, js=f'() => {{{ui.switch_tabs_js}; switch_to_notebook()}}')
 
     shared.gradio['show_controls'].change(None, gradio('show_controls'), None, js=f'(x) => {{{ui.show_controls_js}; toggle_controls(x)}}')
