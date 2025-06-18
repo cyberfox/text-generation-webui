@@ -80,7 +80,6 @@ def create_ui():
                 shared.gradio['Send dummy reply'] = gr.Button('Send dummy reply')
 
             with gr.Row():
-                shared.gradio['send-chat-to-default'] = gr.Button('Send to default')
                 shared.gradio['send-chat-to-notebook'] = gr.Button('Send to notebook')
             
             shared.gradio['show_controls'] = gr.Checkbox(value=shared.settings['show_controls'], label='Show controls (Ctrl+S)', elem_id='show-controls')
