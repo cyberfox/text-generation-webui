@@ -58,7 +58,7 @@ def load_character_and_start_chat(character_name):
 
 def load_persona_json(persona_name):
     """Load a persona from a JSON file and prepare updates for UI"""
-    file_path = f"personas/{persona_name}.json"
+    file_path = f"user_data/personas/{persona_name}.json"
     
     try:
         # Read the persona file
