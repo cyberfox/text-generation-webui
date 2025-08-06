@@ -135,9 +135,9 @@ def create_persona_json(persona_name, user_name=None, character_name=None, user_
         chat_instruct_command: Optional chat-instruct command block from the chat UI
     """
     # Create personas directory if it doesn't exist
-    os.makedirs("personas", exist_ok=True)
+    os.makedirs("user_data/personas", exist_ok=True)
 
-    file_path = f"personas/{persona_name}.json"
+    file_path = f"user_data/personas/{persona_name}.json"
 
     # Get values from UI components if provided, otherwise fall back to shared.settings
     if user_name is None:
@@ -181,9 +181,9 @@ def create_persona_json(persona_name, user_name=None, character_name=None, user_
 def get_available_personas():
     """Get a list of available personas from the personas directory."""
     # Create personas directory if it doesn't exist
-    os.makedirs("personas", exist_ok=True)
+    os.makedirs("user_data/personas", exist_ok=True)
 
-    persona_files = glob.glob('personas/*.json')
+    persona_files = glob.glob('user_data/personas/*.json')
     personas = [os.path.basename(f).split('.')[0] for f in persona_files]
     personas.sort()
 
@@ -226,7 +226,7 @@ def ui():
                 current_char_name = gr.Textbox(visible=False)
                 current_user_bio = gr.Textbox(visible=False)
                 current_system_msg = gr.Textbox(visible=False)
-                current_instruct_msg = gr.Textbox(visible=False)
+                current_instruct_cmd = gr.Textbox(visible=False)
 
                 with gr.Row():
                     cancel_btn = gr.Button("Cancel")
@@ -340,7 +340,7 @@ def ui():
             )
 
             # New persona dialog handlers
-            def show_new_dialog(user_name, char_name, user_bio, system_msg):
+            def show_new_dialog(user_name, char_name, user_bio, system_msg, chat_instruct_cmd):
                 # Capture the current UI state when dialog is opened
                 return [
                     gr.update(visible=True),       # Show the box
@@ -349,6 +349,7 @@ def ui():
                     gr.update(value=char_name),    # Store current character name
                     gr.update(value=user_bio),     # Store current user bio
                     gr.update(value=system_msg),   # Store current system message
+                    gr.update(value=chat_instruct_cmd), # Store current chat instruct command
                 ]
 
             def hide_dialog():
